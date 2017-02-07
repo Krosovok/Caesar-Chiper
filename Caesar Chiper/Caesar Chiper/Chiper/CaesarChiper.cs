@@ -8,5 +8,12 @@ namespace Caesar_Chiper.Chiper
 {
     class CaesarChiper
     {
+        public string Encode(string message, int key)
+        {
+            StringBuilder builder = new StringBuilder(message.Length);
+
+
+            return builder.ToString();
+        }
     }
 }

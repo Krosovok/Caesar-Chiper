@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chiper\Alphabet.cs" />
+    <Compile Include="Chiper\AlphabetException.cs" />
+    <Compile Include="Chiper\CaesarChiper.cs" />
+    <Compile Include="Chiper\RussianAlphabet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
