@@ -45,6 +45,7 @@
     <Compile Include="Chiper\AlphabetException.cs" />
     <Compile Include="Chiper\CaesarChiper.cs" />
     <Compile Include="Chiper\RussianAlphabet.cs" />
+    <Compile Include="ConsoleDialog\Test.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

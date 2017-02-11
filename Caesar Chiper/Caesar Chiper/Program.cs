@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caesar_Chiper.ConsoleDialog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Caesar_Chiper
     {
         static void Main(string[] args)
         {
+            Test.Run();
         }
     }
 }
