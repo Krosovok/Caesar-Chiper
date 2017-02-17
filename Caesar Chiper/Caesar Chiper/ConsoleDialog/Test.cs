@@ -11,11 +11,13 @@ namespace Caesar_Chiper.ConsoleDialog
     {
         public static void Run()
         {
-            IAlphabet russian = new RussianAlphabet();
+            Alphabet russian = new RussianAlphabet();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < russian.AlphabetSize; i++)
             {
-                Console.WriteLine(russian.GetChar(i, true));
+                char c = russian.GetChar(i, true);
+                int pos = russian.GetPosition(c);
+                Console.WriteLine("{0} ({1})", c, pos);
             }
 
             Console.ReadLine();

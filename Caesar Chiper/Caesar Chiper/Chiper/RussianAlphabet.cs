@@ -6,103 +6,101 @@ using System.Threading.Tasks;
 
 namespace Caesar_Chiper.Chiper
 {
-    class RussianAlphabet : IAlphabet
+    class RussianAlphabet : SimpleAlphabet
     {
-        /*public bool IsInAlphabet(char c)
-        {
-            return 
-                'А' < c && c < 'Я' ||
-                'Ё'.Equals(c) ||
-                'а' < c && c < 'я' ||
-                'ё'.Equals(c);
-        }*/
+        private const char SPECIAL_RUSSIAN_LOWER_CASE = 'ё';
+        private const char SPECIAL_RUSSIAN_UPPER_CASE = 'Ё';
 
         /// <summary>
-        /// If a sign is after one of this it is also after special symbols 'ё'.
+        /// If a sign is after one of this it is also after special symbol 'ё'.
         /// </summary>
         private static readonly char[] specialLowerCase = { 'е' };
         private static readonly char[] specialUpperCase = { 'Е' };
 
-        public override char GetChar(int position, bool upperCase)
+        public override char[] SpecialLowerCase
         {
-            if (position > 'а' - 'я' + specialLowerCase.Length || position < 0)
-                throw new AlphabetException("Out of range of the alphabet.");
-
-            char[] special = upperCase ?
-                specialUpperCase : specialLowerCase;
-            char firstChar = upperCase ? 'А' : 'а';
-
-            char spec = GetSpecialChar(position, upperCase);
-            if (spec != '\0')
+            get
             {
-                return spec;
+                return specialLowerCase;
             }
-
-            char baseChar = (char)(firstChar + position);
-            int charsBefore = CharsBefore(baseChar, special);
-            return (char)(baseChar - charsBefore);
         }
 
-        /// <summary>
-        /// Returns position of the char in the alphabet.
-        /// </summary>
-        /// <returns>A number representing char's position in the alphabet.</returns>
-        public override int GetPosition(char c)
+        public override char[] SpecialUpperCase
         {
-            int specialCharPos = GetSpecialCharPosition(c);
-            if (specialCharPos != -1)
+            get
             {
-                return specialCharPos;
-            }
-
-            if (IsInLowerCase(c))
-            {
-                return c - 'а' + CharsBefore(c, specialLowerCase);
-            }
-            else if (IsInUpperCase(c))
-            {
-                return c - 'А' + CharsBefore(c, specialUpperCase);
-            }
-            else
-            {
-                throw new AlphabetException("No such char in this alphabet.");
+                return specialUpperCase;
             }
         }
+
+        public override char FIRST_LOWER_CASE
+        {
+            get
+            {
+                return 'а';
+            }
+        }
+
+        public override char LAST_LOWER_CASE
+        {
+            get
+            {
+                return 'я';
+            }
+        }
+
+        public override char FIRST_UPPER_CASE
+        {
+            get
+            {
+                return 'А';
+            }
+        }
+
+        public override char NONE
+        {
+            get
+            {
+                return '\0';
+            }
+        }
+
+        public char LAST_UPPER_CASE { get { return 'Я'; } }
 
         public override bool IsInLowerCase(char c)
         {
-            return 'а' < c && c < 'я' ||
-                'ё'.Equals(c);
+            return FIRST_LOWER_CASE <= c && c <= LAST_LOWER_CASE ||
+                SPECIAL_RUSSIAN_LOWER_CASE.Equals(c);
         }
 
         public override bool IsInUpperCase(char c)
         {
-            return 'А' < c && c < 'Я' ||
-                'Ё'.Equals(c);
+            return FIRST_UPPER_CASE <= c && c <= LAST_UPPER_CASE ||
+                SPECIAL_RUSSIAN_UPPER_CASE.Equals(c);
         }
 
-        private int GetSpecialCharPosition(char c)
+        protected override int GetSpecialCharPosition(char c)
         {
             switch (c)
             {
-                case 'ё':
-                    return 'е' - 'а' + 1;
-                case 'Ё':
-                    return 'Е' - 'А' + 1;
+                case SPECIAL_RUSSIAN_LOWER_CASE:
+                    return specialLowerCase[0] - FIRST_LOWER_CASE + 1;
+                case SPECIAL_RUSSIAN_UPPER_CASE:
+                    return specialUpperCase[0] - FIRST_UPPER_CASE + 1;
                 default:
                     return -1;
             }
         }
 
-        private char GetSpecialChar(int position, bool upperCase)
+        protected override char GetSpecialChar(int position, bool upperCase)
         {
-            if (position == GetSpecialCharPosition('ё'))
+            if (position == GetSpecialCharPosition(SPECIAL_RUSSIAN_LOWER_CASE))
             {
-                return upperCase ? 'Ё' : 'ё';
+                return upperCase ? SPECIAL_RUSSIAN_UPPER_CASE : SPECIAL_RUSSIAN_LOWER_CASE;
             }
             else
             {
-                return '\0';
+                return NONE;
             }
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Caesar_Chiper.Chiper
 {
-    abstract class IAlphabet //: IEnumerable<char>
+    abstract class Alphabet //: IEnumerable<char>
     {
         public bool IsInAlphabet(char c)
         {
@@ -21,6 +21,11 @@ namespace Caesar_Chiper.Chiper
         public abstract bool IsInLowerCase(char c);
 
         public abstract bool IsInUpperCase(char c);
+
+        public abstract int AlphabetSize
+        {
+            get;
+        }
 
         /// <summary>
         /// Counts addition to position due to signs like 'й' and 'ё'.
