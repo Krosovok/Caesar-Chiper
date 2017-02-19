@@ -12,12 +12,13 @@ namespace Caesar_Chiper.ConsoleDialog
 {
     class Test
     {
+        private const string PATH = "..\\..\\";
         private const string SAMPLE_TEXT = "Этот текст будет зашифрован и расшифрован. А потом в нём посчитают буквы!";
         private const string RAVEN_ANNOUNCE = "Стихотворение \"Ворон\":";
-        private const string RAVEN_TXT = "Ворон.txt";
-        private const string CS_TYPES = "Операторы C#.txt";
+        private const string RAVEN_TXT = PATH + "Ворон.txt";
+        private const string CS_TYPES = PATH + "Операторы C#.txt";
         private const string CS_TYPES_ANNOUNCE = "Операторы в C# с msdn:";
-        private const string PARABLE = "Притча о блудном сыне.txt";
+        private const string PARABLE = PATH + "Притча о блудном сыне.txt";
         private const string PARABEL_ANNOUNCE = "Притча о блудном сыне:";
         private const int TEST_KEY = 11;
         private const int TEST_1 = 56515241;
@@ -53,8 +54,7 @@ namespace Caesar_Chiper.ConsoleDialog
             string message = SAMPLE_TEXT;
             
             Encode(message, encoder, decoder);
-
-            Console.ReadLine();
+            
         }
 
         private static void Encode(string message, Chiper encoder, Chiper decoder)
