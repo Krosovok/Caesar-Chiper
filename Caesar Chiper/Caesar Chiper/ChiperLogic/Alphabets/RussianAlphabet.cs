@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caesar_Chiper.Chiper
+namespace Caesar_Chiper.ChiperLogic
 {
     class RussianAlphabet : SimpleAlphabet
     {
@@ -57,13 +57,7 @@ namespace Caesar_Chiper.Chiper
             }
         }
 
-        public override char NONE
-        {
-            get
-            {
-                return '\0';
-            }
-        }
+        
 
         public char LAST_UPPER_CASE { get { return 'Я'; } }
 
@@ -100,7 +94,7 @@ namespace Caesar_Chiper.Chiper
             }
             else
             {
-                return NONE;
+                return NO_CHAR;
             }
         }
     }

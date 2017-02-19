@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Caesar_Chiper.Chiper
+namespace Caesar_Chiper.ChiperLogic
 {
     class AlphabetException : Exception
     {

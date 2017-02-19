@@ -11,7 +11,11 @@ namespace Caesar_Chiper
     {
         static void Main(string[] args)
         {
-            Test.Run();
+            Test.Alphabet();
+            Test.CaesarEncode();
+            Test.Counting();
+            Test.Xor();
+            Test.NotepadEncode();
         }
     }
 }

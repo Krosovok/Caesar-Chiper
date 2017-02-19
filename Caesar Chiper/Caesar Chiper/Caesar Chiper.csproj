@@ -41,17 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Chiper\Alphabet.cs" />
-    <Compile Include="Chiper\AlphabetException.cs" />
-    <Compile Include="Chiper\CaesarChiper.cs" />
-    <Compile Include="Chiper\RussianAlphabet.cs" />
-    <Compile Include="Chiper\SimpleAlphabet.cs" />
+    <Compile Include="ChiperLogic\Alphabets\Alphabet.cs" />
+    <Compile Include="ChiperLogic\Alphabets\AlphabetException.cs" />
+    <Compile Include="ChiperLogic\Chiper.cs" />
+    <Compile Include="ChiperLogic\ConcreteChipers\CaesarChiper.cs" />
+    <Compile Include="ChiperLogic\Alphabets\RussianAlphabet.cs" />
+    <Compile Include="ChiperLogic\Alphabets\SimpleAlphabet.cs" />
+    <Compile Include="ChiperLogic\ConcreteChipers\OneTimePad.cs" />
+    <Compile Include="ChiperLogic\Counters\AlphabetCounter.cs" />
+    <Compile Include="ChiperLogic\XOR.cs" />
+    <Compile Include="ConsoleDialog\DataPresenter.cs" />
     <Compile Include="ConsoleDialog\Test.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ворон.txt" />
+    <Content Include="Притча о блудном сыне.txt" />
+    <Content Include="Типы C#.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

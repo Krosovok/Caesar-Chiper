@@ -4,14 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caesar_Chiper.Chiper
+namespace Caesar_Chiper.ChiperLogic
 {
-    abstract class Alphabet //: IEnumerable<char>
+    abstract class Alphabet 
     {
         public bool IsInAlphabet(char c)
         {
             return IsInLowerCase(c) ||
                 IsInUpperCase(c);
+        }
+
+        public static char NO_CHAR
+        {
+            get
+            {
+                return '\0';
+            }
         }
 
         public abstract char GetChar(int position, bool upperCase);
@@ -23,6 +31,11 @@ namespace Caesar_Chiper.Chiper
         public abstract bool IsInUpperCase(char c);
 
         public abstract int AlphabetSize
+        {
+            get;
+        }
+
+        public abstract string Symbols
         {
             get;
         }
@@ -42,12 +55,5 @@ namespace Caesar_Chiper.Chiper
 
             return afterSpecialSigns;
         }
-        /*
-        public abstract IEnumerator<char> GetEnumerator();
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }*/
     }
 }

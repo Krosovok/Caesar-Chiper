@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caesar_Chiper.Chiper
+namespace Caesar_Chiper.ChiperLogic
 {
     abstract class SimpleAlphabet : Alphabet
     {
@@ -13,7 +13,6 @@ namespace Caesar_Chiper.Chiper
         public abstract char FIRST_LOWER_CASE { get; }
         public abstract char LAST_LOWER_CASE { get; }
         public abstract char FIRST_UPPER_CASE { get; }
-        public abstract char NONE { get; }
 
         public override int AlphabetSize
         {
@@ -23,6 +22,19 @@ namespace Caesar_Chiper.Chiper
             }
         }
 
+        public override string Symbols
+        {
+            get
+            {
+                int size = AlphabetSize;
+                char[] symbols = new char[size];
+                for (int i = 0; i < size; i++)
+                {
+                    symbols[i] = GetChar(i, true);
+                }
+                return new string(symbols);
+            }
+        }
 
         public override char GetChar(int position, bool upperCase)
         {
@@ -34,7 +46,7 @@ namespace Caesar_Chiper.Chiper
             char firstChar = upperCase ? FIRST_UPPER_CASE : FIRST_LOWER_CASE;
 
             char spec = GetSpecialChar(position, upperCase);
-            if (spec != NONE)
+            if (spec != NO_CHAR)
             {
                 return spec;
             }
