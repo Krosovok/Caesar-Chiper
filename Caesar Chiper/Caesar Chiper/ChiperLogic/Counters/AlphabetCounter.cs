@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,15 @@ namespace Caesar_Chiper.ChiperLogic.Counters
             get
             {
                 return new Dictionary<char, int>(frequency);
+            }
+        }
+
+        public IOrderedEnumerable<KeyValuePair<char, int>> FrequencyOrderedDescending
+        {
+            get
+            {
+                Dictionary<char, int> res = new Dictionary<char, int>(frequency);
+                return frequency.OrderByDescending(pair => pair.Value);
             }
         }
 
@@ -53,6 +63,12 @@ namespace Caesar_Chiper.ChiperLogic.Counters
             return builder.ToString();
         }
 
+        public void CountInFile(string fileName)
+        {
+            string content = File.ReadAllText(fileName);
+            Add(content);
+        }
+
         private void CreateNewDictionary()
         {
             string upperCaseSymbols = alphabet.Symbols;
@@ -62,5 +78,6 @@ namespace Caesar_Chiper.ChiperLogic.Counters
                 frequency.Add(symbol, 0);
             }
         }
+
     }
 }

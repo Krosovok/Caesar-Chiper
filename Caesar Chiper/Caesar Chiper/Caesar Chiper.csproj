@@ -47,11 +47,14 @@
     <Compile Include="ChiperLogic\ConcreteChipers\CaesarChiper.cs" />
     <Compile Include="ChiperLogic\Alphabets\RussianAlphabet.cs" />
     <Compile Include="ChiperLogic\Alphabets\SimpleAlphabet.cs" />
+    <Compile Include="ChiperLogic\ConcreteChipers\OneAlphabetChange.cs" />
     <Compile Include="ChiperLogic\ConcreteChipers\OneTimePad.cs" />
     <Compile Include="ChiperLogic\Counters\AlphabetCounter.cs" />
     <Compile Include="ChiperLogic\XOR.cs" />
     <Compile Include="ConsoleDialog\DataPresenter.cs" />
     <Compile Include="ConsoleDialog\Test.cs" />
+    <Compile Include="DecoderLogic\FileDictionary.cs" />
+    <Compile Include="DecoderLogic\OneAlphabetDecoder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -11,8 +11,8 @@ namespace Caesar_Chiper.ConsoleDialog
     {
         public string ToDiagram(AlphabetCounter counter)
         {
-            Dictionary<char, int> frequency = counter.Frequency;
-            var ordered = frequency.OrderByDescending(pair => pair.Value);
+            //Dictionary<char, int> frequency = counter.Frequency;
+            var ordered = counter.FrequencyOrderedDescending;
 
             StringBuilder builder = new StringBuilder();
 

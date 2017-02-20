@@ -11,11 +11,22 @@ namespace Caesar_Chiper
     {
         static void Main(string[] args)
         {
-            Test.Alphabet();
+            /*Test.Alphabet();
             Test.CaesarEncode();
             Test.Counting();
             Test.Xor();
-            Test.NotepadEncode();
+            Test.NotepadEncode();*/
+            //Test.Count2(); // 1
+            //Test.OneAlphabetChange();
+            Test.Counting();
         }
+
+        /*
+        
+        1) Статистика для расшифр. и зашифр. части.
+        2) Словарик разбиением на пробелы.
+        3) Беру слово ==> Варианты рашифровки ==> Сравнить. 
+
+         */
     }
 }

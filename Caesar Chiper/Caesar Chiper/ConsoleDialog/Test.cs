@@ -1,5 +1,6 @@
 ﻿using Caesar_Chiper.ChiperLogic;
 using Caesar_Chiper.ChiperLogic.Concrete;
+using Caesar_Chiper.ChiperLogic.ConcreteChipers;
 using Caesar_Chiper.ChiperLogic.Counters;
 using System;
 using System.Collections.Generic;
@@ -111,15 +112,47 @@ namespace Caesar_Chiper.ConsoleDialog
                 + "Working!");
         }
 
+        public static void Count2()
+        {
+            Alphabet russian = new RussianAlphabet();
+            AlphabetCounter counter = new AlphabetCounter(russian);
+
+            CountInFile(counter, PATH + "Шифр.txt", "");
+
+            string message = File.ReadAllText(PATH + "Шифр.txt");
+            //Chiper caesar = new CaesarChiper(10, alphabets);
+            Chiper caesar = new CaesarChiper(16, alphabets);
+            string res = caesar.Encode(message);
+            Console.WriteLine(res);
+            Console.ReadLine();
+        }
+
+        public static void OneAlphabetChange()
+        {
+            Chiper oneAlphabet = 
+                new OneAlphabetChange(
+                    alphabets);
+
+            EncodeFromFile(oneAlphabet, RAVEN_TXT);
+        }
+
         private static void CountInFile(AlphabetCounter counter, string fileName, string announce)
         {
             Console.WriteLine(announce);
-            string content = File.ReadAllText(fileName);
-            counter.Add(content);
+            counter.CountInFile(fileName);
             Console.WriteLine(counter);
             counter.Clear();
             Console.ReadLine();
         }
+
+        private static void EncodeFromFile(Chiper chiper, string fileName)
+        {
+            string content = File.ReadAllText(fileName);
+            string encoded = chiper.Encode(content);
+            Console.WriteLine(encoded);
+            Console.ReadLine();
+        }
+        
         
     }
 }
