@@ -10,9 +10,12 @@ namespace Caesar_Chiper.DecoderLogic
 {
     class OneAlphabetDecoder
     {
-        AlphabetCounter overallStatistics;
-        AlphabetCounter encodedStatistics;
-        FileDictionary dictionary;
+        private AlphabetCounter overallStatistics;
+        private AlphabetCounter encodedStatistics;
+        private FileDictionary dictionary;
+        private Dictionary<char, char> foundMatch = new Dictionary<char, char>();
+
+        private const int TAKE_HYPOTHESIS = 5;
 
         public OneAlphabetDecoder(Alphabet alphabet, string fileName)
         {
@@ -32,10 +35,10 @@ namespace Caesar_Chiper.DecoderLogic
 
             foreach (string word in words)
             {
-                foreach (char symbol in word)
-                {
+                if 
 
-                }
+
+                TryWord(word, stat, encodedStat);
             }
 
            
@@ -49,16 +52,37 @@ namespace Caesar_Chiper.DecoderLogic
         private void TryWord(string word, List<char> stat, List<char> encodedStat)
         {
             IEnumerable<char> symbols = word.Distinct();
+            Dictionary<char, IEnumerable<char>> hypothesises = 
+                new Dictionary<char, IEnumerable<char>>(symbols.Count());
 
-            int idx = encodedStat.IndexOf(symbols.ElementAt(0));
-
-            /*for (int i = 0; i < encodedStat.Length; i++)
+            foreach (char ch in symbols)
             {
-                for (int j = start; j < end; j++)
-                {
+                hypothesises.Add(ch, 
+                    CreateHypothesis(ch, stat, encodedStat));
+            }
 
-                }
-            }*/
+            Checker checker = new Checker(hypothesises, dictionary, word);
+            checker.TryBuildWord();
+            Dictionary<char, char> found = checker.Matched;
+            foreach (KeyValuePair<char, char> match in found)
+            {
+                foundMatch.Add(match.Key, match.Value);
+            }
+        }
+
+        private static IEnumerable<char> CreateHypothesis(char symbol, List<char> stat, List<char> encodedStat)
+        {
+            int idx = encodedStat.IndexOf(symbol);
+
+            int startIdx = idx - TAKE_HYPOTHESIS;
+            int endIdx = idx + TAKE_HYPOTHESIS;
+
+            int start = startIdx > 0 ?
+                startIdx : 0;
+            int end = endIdx < encodedStat.Count ?
+                endIdx : encodedStat.Count;
+
+            return stat.GetRange(start, end);
         }
     }
 }

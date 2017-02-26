@@ -53,6 +53,8 @@
     <Compile Include="ChiperLogic\XOR.cs" />
     <Compile Include="ConsoleDialog\DataPresenter.cs" />
     <Compile Include="ConsoleDialog\Test.cs" />
+    <Compile Include="DecoderLogic\AlreadyHaveMatchException.cs" />
+    <Compile Include="DecoderLogic\Checker.cs" />
     <Compile Include="DecoderLogic\FileDictionary.cs" />
     <Compile Include="DecoderLogic\OneAlphabetDecoder.cs" />
     <Compile Include="Program.cs" />
