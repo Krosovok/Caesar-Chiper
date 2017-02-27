@@ -2,6 +2,7 @@
 using Caesar_Chiper.ChiperLogic.Concrete;
 using Caesar_Chiper.ChiperLogic.ConcreteChipers;
 using Caesar_Chiper.ChiperLogic.Counters;
+using Caesar_Chiper.DecoderLogic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,10 +22,12 @@ namespace Caesar_Chiper.ConsoleDialog
         private const string CS_TYPES_ANNOUNCE = "Операторы в C# с msdn:";
         private const string PARABLE = PATH + "Притча о блудном сыне.txt";
         private const string PARABEL_ANNOUNCE = "Притча о блудном сыне:";
+        private const string _20000 = PATH + "20000.txt";
         private const int TEST_KEY = 11;
         private const int TEST_1 = 56515241;
         private const int TEST_2 = 274936615;
-
+        private const int ALL_LINES = -1;
+        private const int THREE_CHAPTERS = 263;
         private static Alphabet[] alphabets = {
                 new RussianAlphabet()
             };
@@ -133,7 +136,22 @@ namespace Caesar_Chiper.ConsoleDialog
                 new OneAlphabetChange(
                     alphabets);
 
-            EncodeFromFile(oneAlphabet, RAVEN_TXT);
+            //string allText = File.ReadAllText(RAVEN_TXT);
+            string encodedPart = EncodeFromFile(oneAlphabet, _20000, THREE_CHAPTERS);
+
+            OneAlphabetDecoder decoder = 
+                new OneAlphabetDecoder(
+                    new RussianAlphabet(),
+                    _20000);
+            decoder.TryDecode(encodedPart);
+            Match<char> key = decoder.Key;
+            Console.WriteLine("Finished processing. Found key: {0}", key);
+            Console.ReadLine();
+
+            Chiper reader = new OneAlphabetChange(key, alphabets);
+            string decodedPart = reader.Encode(encodedPart);
+            Console.WriteLine(decodedPart);
+            Console.ReadLine();
         }
 
         private static void CountInFile(AlphabetCounter counter, string fileName, string announce)
@@ -145,14 +163,25 @@ namespace Caesar_Chiper.ConsoleDialog
             Console.ReadLine();
         }
 
-        private static void EncodeFromFile(Chiper chiper, string fileName)
+        private static string EncodeFromFile(Chiper chiper, string fileName, int lines = ALL_LINES)
         {
-            string content = File.ReadAllText(fileName);
-            string encoded = chiper.Encode(content);
+            string[] content = File.ReadAllLines(fileName);
+            if (lines == ALL_LINES)
+            {
+                lines = content.Length;
+            }
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < lines; i++)
+            {
+                builder.AppendLine(
+                    chiper.Encode(content[i]));
+            }
+            string encoded = builder.ToString();
+
             Console.WriteLine(encoded);
             Console.ReadLine();
+            return encoded;
         }
-        
-        
     }
 }

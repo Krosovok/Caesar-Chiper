@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Caesar_Chiper.ChiperLogic;
+using Caesar_Chiper.ConsoleDialog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,49 +13,67 @@ namespace Caesar_Chiper.DecoderLogic
     {
         private Dictionary<char, IEnumerable<char>> hypothesises;
         private IEnumerable<char> symbols;
-        private FileDictionary knownWords;
-        private Dictionary<char, char> matched;
+        private WordsDictionary knownWords;
+        // private Dictionary<char, char> matched;
+        private Match<char> matched;
         private string encodedWord;
+        private Alphabet alphabet;
+        private Match<char> alreadyKnown;
 
-        public Checker(Dictionary<char, IEnumerable<char>> hypothesises,
-            FileDictionary knownWords, string word)
+        public Checker(string word,
+            Alphabet alphabet,
+            WordsDictionary knownWords,
+            Match<char> alreadyFound,
+            Dictionary<char, IEnumerable<char>> hypothesises)
         {
             encodedWord = word;
             this.hypothesises = hypothesises;
             this.knownWords = knownWords;
+            this.alphabet = alphabet;
+            this.alreadyKnown = alreadyFound;
 
-            symbols = hypothesises.Keys;
+            symbols = hypothesises.Keys.Where(symbol => alphabet.IsInAlphabet(symbol));
         }
 
         public void TryBuildWord()
         {
-            BuildWord(new Dictionary<char, char>(), 0);
+            try
+            {
+                BuildWord(new Match<char>(alphabet), 0);
+            }
+            catch (AlreadyHaveMatchException e)
+            {
+                this.matched = null;
+                Log.Error(e.Message);
+            }
         }
 
-        public Dictionary<char, char> Matched
+        public Match<char> Matched
         {
             get
             {
                 if (matched == null)
-                    return new Dictionary<char, char>();
+                    return new Match<char>(alphabet);
                 else
-                    return new Dictionary<char, char>(matched);
+                    return new Match<char>(matched);
             }
         }
 
-        private void BuildWord(Dictionary<char, char> assumption, int idx)
+        private void BuildWord(Match<char> assumption, int idx)
         {
             char nextChar = symbols.ElementAtOrDefault(idx);
 
-            if (nextChar != default(char)) //??? 
+            if (nextChar != default(char))
             {
-                IEnumerable<char> nextCharHypothesis = hypothesises[nextChar];
-                foreach (char hypothetic in nextCharHypothesis)
+                if (alreadyKnown[nextChar] == default(char))
                 {
-                    Dictionary<char, char> nextAssumption = new Dictionary<char, char>(assumption);
-                    nextAssumption.Add(nextChar, hypothetic);
-                    BuildWord(nextAssumption, idx + 1);
+                    AssumeNext(assumption, idx, nextChar);
                 }
+                else
+                {
+                    NextAlreadyFound(assumption, idx, nextChar);
+                }
+
             }
             else
             {
@@ -61,10 +81,32 @@ namespace Caesar_Chiper.DecoderLogic
             }
         }
 
-        private void Compare(Dictionary<char, char> assumption)
+        private void NextAlreadyFound(Match<char> assumption, int idx, char nextChar)
+        {
+            assumption[nextChar] = alreadyKnown[nextChar];
+            BuildWord(assumption, idx + 1);
+        }
+
+        private void AssumeNext(Match<char> assumption, int idx, char nextChar)
+        {
+            IEnumerable<char> nextCharHypothesis = hypothesises[nextChar];
+            foreach (char hypothetic in nextCharHypothesis)
+            {
+                Match<char> nextAssumption = new Match<char>(assumption);
+                nextAssumption[nextChar] = hypothetic;
+                BuildWord(nextAssumption, idx + 1);
+            }
+        }
+
+        private void Compare(Match<char> assumption)
         {
             string word = new string(
-                encodedWord.Select(ch => assumption[ch]).ToArray());
+                encodedWord.Select(
+                    ch =>
+                    alphabet.IsInAlphabet(ch) ?
+                    assumption[ch] : 
+                    ch
+                ).ToArray());
 
             string found = knownWords.Check(word);
 
@@ -74,6 +116,7 @@ namespace Caesar_Chiper.DecoderLogic
                     throw new AlreadyHaveMatchException("Already found match on this sequence of charcters.");
 
                 matched = assumption;
+                Log.FoundWord(encodedWord, found);
             }
         }
     }

@@ -7,20 +7,52 @@ using System.Threading.Tasks;
 
 namespace Caesar_Chiper.DecoderLogic
 {
-    class FileDictionary
+    class WordsDictionary
     {
         private string[] words;
+        private Dictionary<int, List<string>> wordsDictionary;
         private static char[] SEPARATORS = new char[] { ' ' };
 
-        public FileDictionary(string fileName)
+        public string[] Words
+        {
+            get
+            {
+                return words.ToArray();
+            }
+        }
+
+        public WordsDictionary(string fileName)
         {
             string content = File.ReadAllText(fileName);
-            words = content.Split(SEPARATORS);
+            SetWords(content);
         }
+
+        private WordsDictionary() { }
 
         public string Check(string toCheck)
         {
-            return words.FirstOrDefault(word => word.Equals(toCheck));
+            return wordsDictionary[toCheck.Length].
+                FirstOrDefault(str => str.Equals(toCheck));
+        }
+
+        public static WordsDictionary FromString(string str)
+        {
+            WordsDictionary newWords = new WordsDictionary();
+            newWords.SetWords(str);
+            return newWords;
+        }
+
+        private void SetWords(string str)
+        {
+            words = str.Split(SEPARATORS).Where(word => !string.IsNullOrWhiteSpace(word)).ToArray();
+            IEnumerable<IGrouping<int, string>> grouped = 
+                words.GroupBy(s => s.Length);
+            wordsDictionary = new Dictionary<int, List<string>>();
+
+            foreach (IGrouping<int, string> group in grouped)
+            {
+                wordsDictionary.Add(group.Key, group.Select(s => s.ToUpper()).ToList());
+            }
         }
     }
 }

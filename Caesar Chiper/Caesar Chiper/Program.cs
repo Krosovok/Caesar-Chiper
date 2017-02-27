@@ -17,8 +17,8 @@ namespace Caesar_Chiper
             Test.Xor();
             Test.NotepadEncode();*/
             //Test.Count2(); // 1
-            //Test.OneAlphabetChange();
-            Test.Counting();
+            Test.OneAlphabetChange();
+            //Test.Counting();
         }
 
         /*

@@ -1,5 +1,6 @@
 ﻿using Caesar_Chiper.ChiperLogic;
 using Caesar_Chiper.ChiperLogic.Counters;
+using Caesar_Chiper.ConsoleDialog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,40 +11,57 @@ namespace Caesar_Chiper.DecoderLogic
 {
     class OneAlphabetDecoder
     {
+        private Alphabet alphabet;
         private AlphabetCounter overallStatistics;
         private AlphabetCounter encodedStatistics;
-        private FileDictionary dictionary;
-        private Dictionary<char, char> foundMatch = new Dictionary<char, char>();
+        private WordsDictionary dictionary;
+        // private Dictionary<char, char> foundMatch = new Dictionary<char, char>();
+        private Match<char> foundMatch;
 
         private const int TAKE_HYPOTHESIS = 5;
 
         public OneAlphabetDecoder(Alphabet alphabet, string fileName)
         {
+            this.alphabet = alphabet;
             overallStatistics = new AlphabetCounter(alphabet);
             encodedStatistics = new AlphabetCounter(alphabet);
+            foundMatch = new Match<char>(alphabet);
             overallStatistics.CountInFile(fileName);
-            dictionary = new FileDictionary(fileName);
+            dictionary = new WordsDictionary(fileName);
+        }
+
+        public Match<char> Key
+        {
+            get
+            {
+                return new Match<char>(foundMatch);
+            }
         }
 
         public void TryDecode(string text)
         {
             encodedStatistics.Add(text);
-            string[] words = text.Split(' ');
+            Log.Statistics(overallStatistics);
+            Log.Statistics(encodedStatistics);
+            WordsDictionary dictionary = WordsDictionary.FromString(text);
 
             List<char> stat = GetStat(overallStatistics);
             List<char> encodedStat = GetStat(encodedStatistics);
-
-            foreach (string word in words)
+            
+            foreach (string word in dictionary.Words)
             {
-                if 
-
-
+                Log.StartProcessing(word);
+                if (foundMatch.AllFound)
+                {
+                    return;
+                }
+                
                 TryWord(word, stat, encodedStat);
+                Log.KnownWords(foundMatch);
             }
-
-           
+            
         }
-
+        
         private List<char> GetStat(AlphabetCounter counter)
         {
             return counter.FrequencyOrderedDescending.Select(pair => pair.Key).ToList();
@@ -51,7 +69,7 @@ namespace Caesar_Chiper.DecoderLogic
 
         private void TryWord(string word, List<char> stat, List<char> encodedStat)
         {
-            IEnumerable<char> symbols = word.Distinct();
+            IEnumerable<char> symbols = word.ToUpper().Distinct();
             Dictionary<char, IEnumerable<char>> hypothesises = 
                 new Dictionary<char, IEnumerable<char>>(symbols.Count());
 
@@ -61,13 +79,14 @@ namespace Caesar_Chiper.DecoderLogic
                     CreateHypothesis(ch, stat, encodedStat));
             }
 
-            Checker checker = new Checker(hypothesises, dictionary, word);
+            Checker checker = new Checker(
+                word,
+                alphabet,
+                dictionary,
+                foundMatch, 
+                hypothesises);
             checker.TryBuildWord();
-            Dictionary<char, char> found = checker.Matched;
-            foreach (KeyValuePair<char, char> match in found)
-            {
-                foundMatch.Add(match.Key, match.Value);
-            }
+            foundMatch.AddUnknown(checker.Matched);
         }
 
         private static IEnumerable<char> CreateHypothesis(char symbol, List<char> stat, List<char> encodedStat)
@@ -82,7 +101,7 @@ namespace Caesar_Chiper.DecoderLogic
             int end = endIdx < encodedStat.Count ?
                 endIdx : encodedStat.Count;
 
-            return stat.GetRange(start, end);
+            return stat.GetRange(start, end - start);
         }
     }
 }

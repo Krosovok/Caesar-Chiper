@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caesar_Chiper.DecoderLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,38 +9,22 @@ namespace Caesar_Chiper.ChiperLogic.ConcreteChipers
 {
     class OneAlphabetChange : Chiper
     {
-        Dictionary<char, char> key;
+        Match<char> key;
 
         public OneAlphabetChange(IEnumerable<Alphabet> alphabets)
         {
             this.alphabets = alphabets.ToArray();
             Alphabet alphabet = this.alphabets[0];
             int alphabetSize = alphabet.AlphabetSize;
-            key = new Dictionary<char, char>(alphabetSize);
-            Random random = new Random();
 
-            foreach (char symbol in alphabet.Symbols)
-            {
-                while (!key.ContainsKey(symbol))
-                {
-                    int randomPos = random.Next(alphabetSize);
-                    var randomChar = alphabet.GetChar(randomPos, true);
-
-                    if (!key.ContainsValue(randomChar))
-                    {
-                        key.Add(symbol, randomChar);
-                    }
-                }
-            }
+            key = Match<char>.RandomMatch(alphabet);
         }
 
-        /*public void PrintKey()
+        public OneAlphabetChange(Match<char> key, IEnumerable<Alphabet> alphabets) 
+            : this(alphabets)
         {
-            foreach (KeyValuePair<char, char> pair in key)
-            {
-                Console.WriteLine(pair);
-            }
-        }*/
+            this.key = key;
+        }
 
         protected override char EncodeNext(char toEncode)
         {
